@@ -3,6 +3,11 @@
 A daily automated newsletter that pulls AI/tech news and upcoming AI events from multiple sources, summarizes everything into a clean digest with an LLM, and emails it out — a personal "Tech Brief" delivered every morning.
 
 **Stack**: n8n, RSS feeds, SerpAPI, Google Gemini, Gmail
+## Workflow 
+![Newsletter automation workflow](./assets/workflow.png)
+
+## Sample Output
+![Sample newsletter email](./assets/sample_output.png)
 
 ## What it does
 
