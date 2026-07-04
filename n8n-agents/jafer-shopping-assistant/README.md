@@ -2,8 +2,8 @@
 
 An always-on Telegram bot that helps users search for products on Amazon India and gives personalized outfit styling advice. Built as an n8n workflow, deployed 24/7 on Railway.
 
-## Workflow Canvas
-![Jafer workflow](./assets/workflow-canvas.png)
+## Workflow 
+![Jafer workflow](./assets/workflow.png)
 
 ## Sample Output
 ![Sample conversation](./assets/sample-output.png)
