@@ -1,0 +1,250 @@
+{
+  "name": "PlacementEmail",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -352,
+        -128
+      ],
+      "id": "fcaed238-0660-41fe-b0c0-2698302c21bf",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "HrFSleUpXkHcGq5T",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a3940c7e-5061-4369-84b6-9980ea509c55",
+              "leftValue": "={{ $json.Subject }}",
+              "rightValue": "internship",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "8f03a7a2-d062-4da2-9250-a01e14bdeb7b",
+              "leftValue": "={{ $json.Subject }}",
+              "rightValue": "offer letter",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "6667731c-73fc-4d51-8eb7-1cace3f2249d",
+              "leftValue": "={{ $json.Subject }}",
+              "rightValue": "campus drive",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "c798bc7d-8672-4c14-89c6-3c687690d939",
+              "leftValue": "={{ $json.Subject }}",
+              "rightValue": "placement",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "7e29f7b8-4caf-409d-9568-f4082a06bd72",
+              "leftValue": "={{ $json.Subject }}",
+              "rightValue": "nxtwave",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "5c8bf90a-37be-449b-b57c-6f41a7200529",
+              "leftValue": "={{ $json.From }}",
+              "rightValue": "academy-placement@nxtwave.co.in",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "37e23111-4840-4fe6-bd61-87a43629620f",
+              "leftValue": "={{ $json.Subject }}",
+              "rightValue": "workshop",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "e9e5a25e-7dcf-4ec1-acac-3aaeb095fb4e",
+              "leftValue": "={{ $json.Subject }}",
+              "rightValue": "opportunity",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -144,
+        -128
+      ],
+      "id": "af382eaf-1cdb-4878-b321-1d72ed8c7a0a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "YOUR_DISCORD_WEBHOOK_URL",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{\n\"\ud83d\udcec New Alert!\\n\" +\n\"From: \" + $('Gmail Trigger').item.json.From + \"\\n\" +\n\"Heading: \" + $('Gmail Trigger').item.json.Subject + \"\\n\" +\n\"Date: \" +\nnew Date(\n  Number($('Gmail Trigger').item.json.internalDate)\n).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) +\n\"\\n\" +\n \"\\n\\n\" +\n\"\ud83d\udcdd Summary:\\n\" +\n$('Basic LLM Chain').item.json.text\n}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        336,
+        -144
+      ],
+      "id": "94fb21ed-dbff-41f3-b81f-98cbaf4ca835",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Summarize this email in 3-4  sentences. Also extract any registration links or important URLs.\n\nFormat your reply exactly like this:\nSummary: <your summary here>\nLinks: <URLs separated by commas, or 'None'>\n\nFrom: {{ $('Gmail Trigger').item.json.From }}\nSubject: {{ $('Gmail Trigger').item.json.Subject }}\nBody: {{ $('Gmail Trigger').item.json.snippet }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        80,
+        -272
+      ],
+      "id": "f692e700-253c-4135-8bd0-79feb64ff806",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        -96
+      ],
+      "id": "ea8f217e-e706-401a-b7aa-e17c256878c0",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Gh7A10TRUul4osqM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "e6fd1f1b-a970-4300-85f7-210bfd3f1f4c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e2c83f246dfdb780b6423e95ac08c123f12882ccd6374102e41a7bd32ab44c35"
+  },
+  "nodeGroups": [],
+  "id": "2MV7vXdBdQjwaSVO",
+  "tags": []
+}

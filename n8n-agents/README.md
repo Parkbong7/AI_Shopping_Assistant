@@ -7,6 +7,7 @@ A collection of AI agent workflows built with [n8n](https://n8n.io), deployed on
 | Project | Description | Stack |
 |---|---|---|
 | [Jafer — Shopping & Styling Assistant](./jafer-shopping-assistant) | Telegram bot for product search (Amazon India) and outfit styling advice, with voice message support | n8n, Gemini 2.5 Flash, Groq Whisper, ScraperAPI |
+| [Placement Email Alert](./placement-email-alert) | Watches Gmail for placement/internship emails, summarizes with AI, and posts alerts to Discord | n8n, Gmail API, Gemini, Discord Webhooks |
 
 More projects coming soon.
 
